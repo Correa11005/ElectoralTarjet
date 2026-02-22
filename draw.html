@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dibujar | Canvas Draw</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a class="btn btn-ghost" href="index.html">← Volver</a>
+      <h2 class="topbar-title">Dibuja sobre la imagen</h2>
+      <div class="spacer"></div>
+    </header>
+
+    <section class="card">
+      <div class="controls">
+        <label class="control">
+          <span class="control-label">Color</span>
+          <input id="colorPicker" type="color" value="#ff2d55" />
+        </label>
+
+        <label class="control">
+          <span class="control-label">Grosor: <strong id="sizeValue">6</strong></span>
+          <input id="sizeRange" type="range" min="1" max="40" value="6" />
+        </label>
+
+        <button id="undoBtn" class="btn btn-secondary" type="button">Deshacer</button>
+        <button id="clearBtn" class="btn btn-danger" type="button">Borrar todo</button>
+        <button id="downloadBtn" class="btn btn-primary" type="button">Descargar imagen</button>
+      </div>
+
+      <div class="stage" aria-label="Área de dibujo">
+        <img
+          id="baseImage"
+          alt="Tarjeta"
+          src="assets/tarjeta.jpg"
+          loading="eager"
+          decoding="async"
+        />
+
+        <canvas id="drawCanvas"></canvas>
+
+        <div class="stage-hint muted">
+          Mantén presionado y dibuja. En móvil, usa el dedo.
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer muted">
+      El dibujo se guarda en historial (strokes) para mantener proporción al redimensionar.
+    </footer>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
