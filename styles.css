@@ -185,6 +185,7 @@ input[type="range"]{
   inset: 0;
   width: 100%;
   height: 100%;
+  #drawCanvas { touch-action: none; }
   /* important for mobile drawing */
   touch-action: none;
   cursor: crosshair;
@@ -211,4 +212,38 @@ input[type="range"]{
     width: 100%;
     justify-content: center;
   }
+}
+
+.stage-wrapper{
+  overflow: auto;
+  max-height: 70vh;     /* ajusta si quieres más alto */
+}
+
+.stage{
+  position: relative;
+  display: inline-block;
+  transform-origin: top left;
+}
+
+#baseImage{
+  display: block;
+  width: 520px;         /* 👈 imagen más pequeña por defecto */
+  max-width: 100%;
+  height: auto;
+}
+
+#drawCanvas{
+  position: absolute;
+  inset: 0;
+  touch-action: none;   /* evita gestos dentro del canvas */
+}
+
+/* En modo navegar, el canvas NO captura gestos */
+.stage.is-pan #drawCanvas{
+  pointer-events: none; /* deja pasar scroll/drag al wrapper */
+}
+
+/* Si quieres un feedback visual */
+#modeBtn.is-pan{
+  opacity: 0.85;
 }

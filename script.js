@@ -13,9 +13,11 @@
   // ====== DOM ======
   const canvas = document.getElementById("drawCanvas");
   const ctx = canvas.getContext("2d");
-
+  const modeBtn = document.getElementById("modeBtn");
+  const stage = document.getElementById("stage"); // si ya lo tienes por zoom, no lo repitas
   const img = document.getElementById("baseImage");
-
+  const zoomRange = document.getElementById("zoomRange");
+  const zoomValue = document.getElementById("zoomValue");
   const colorPicker = document.getElementById("colorPicker");
   const sizeRange = document.getElementById("sizeRange");
   const sizeValue = document.getElementById("sizeValue");
@@ -27,6 +29,7 @@
   let strokes = []; // historial de trazos: [{color, size, points:[{x,y}]}]
   let currentStroke = null;
   let isDrawing = false;
+  let mode = "draw"; // "draw" | "pan"
 
   // Para Pointer Events: así evitamos dibujar con toques múltiples
   let activePointerId = null;
@@ -56,6 +59,8 @@
   function fitCanvasToImage() {
     const displayW = img.clientWidth;
     const displayH = img.clientHeight;
+    canvas.style.width = displayW + "px";
+    canvas.style.height = displayH + "px";
 
     // En algunos momentos (antes de cargar imagen), puede ser 0
     if (!displayW || !displayH) return;
@@ -107,17 +112,55 @@
 
     ctx.stroke();
   }
-
+  function setMode(nextMode) {
+  mode = nextMode;
+  const isPan = mode === "pan";
+  stage.classList.toggle("is-pan", isPan);
+}
   function setUIState() {
     sizeValue.textContent = String(sizeRange.value);
     undoBtn.disabled = strokes.length === 0;
     clearBtn.disabled = strokes.length === 0;
   }
+function setMode(nextMode) {
+  mode = nextMode;
+
+  const isPan = mode === "pan";
+
+  // UI
+  modeBtn.textContent = isPan ? "🖐 Navegar" : "✍️ Dibujar";
+  modeBtn.classList.toggle("is-pan", isPan);
+  modeBtn.setAttribute("aria-pressed", String(!isPan));
+
+  // comportamiento: en pan, el canvas no recibe eventos
+  stage.classList.toggle("is-pan", isPan);
+
+  // si estaban dibujando y cambian de modo, cerramos el trazo
+  if (isPan && isDrawing) {
+    // forzamos cierre sin depender de un event real
+    isDrawing = false;
+    currentStroke = null;
+    try {
+      if (activePointerId !== null) canvas.releasePointerCapture(activePointerId);
+    } catch (_) {}
+    activePointerId = null;
+    redrawAll();
+    setUIState();
+  }
+}
+modeBtn.addEventListener("click", () => {
+  setMode(mode === "draw" ? "pan" : "draw");
+});
+
+// modo inicial
+setMode("draw");
 
   // ====== Lógica de dibujo (Pointer Events) ======
 
   function startDraw(e) {
     // Solo si es el primer pointer activo
+    
+    if (mode === "pan") return;
     if (activePointerId !== null) return;
 
     activePointerId = e.pointerId;
@@ -129,7 +172,9 @@
       size: Number(sizeRange.value),
       points: []
     };
-
+   modeBtn.addEventListener("click", () => {
+  setMode(mode === "draw" ? "pan" : "draw");
+  });
     currentStroke.points.push(getNormalizedPoint(e));
 
     // Redibuja y pinta el inicio (feedback inmediato)
@@ -177,6 +222,20 @@
     redrawAll();
     setUIState();
   }
+  function applyZoom() {
+  const zoom = Number(zoomRange.value);
+  stage.style.transform = `scale(${zoom})`;
+  zoomValue.textContent = zoom.toFixed(1);
+}
+
+zoomRange.addEventListener("input", () => {
+  applyZoom();
+  // OJO: al hacer zoom, el tamaño visible cambia -> recalculamos canvas
+  fitCanvasToImage();
+});
+
+// al iniciar
+applyZoom(); 
 
   function clearAll() {
     strokes = [];
@@ -202,7 +261,9 @@
     tempCtx.lineCap = "round";
     tempCtx.lineJoin = "round";
     tempCtx.strokeStyle = stroke.color;
-    tempCtx.lineWidth = stroke.size * (naturalWidth / img.clientWidth);
+    const scaleX = naturalWidth / img.clientWidth;
+    const scaleY = naturalHeight / img.clientHeight;
+    tempCtx.lineWidth = stroke.size * (naturalWidth / img.clientWidth); 
 
     const pts = stroke.points;
     if (!pts.length) continue;

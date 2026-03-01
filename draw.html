@@ -16,6 +16,9 @@
 
     <section class="card">
       <div class="controls">
+        <button id="modeBtn" class="btn btn-secondary" type="button" aria-pressed="true">
+       ✍️ Dibujar
+        </button>
         <label class="control">
           <span class="control-label">Color</span>
           <input id="colorPicker" type="color" value="#ff2d55" />
@@ -26,24 +29,32 @@
           <input id="sizeRange" type="range" min="1" max="40" value="6" />
         </label>
 
+        <label class="control">
+          <span class="control-label">Zoom: <strong id="zoomValue">1.0</strong>x</span>
+          <input id="zoomRange" type="range" min="0.7" max="2.5" step="0.1" value="1" />
+        </label>
+
         <button id="undoBtn" class="btn btn-secondary" type="button">Deshacer</button>
         <button id="clearBtn" class="btn btn-danger" type="button">Borrar todo</button>
         <button id="downloadBtn" class="btn btn-primary" type="button">Descargar imagen</button>
       </div>
 
-      <div class="stage" aria-label="Área de dibujo">
-        <img
-          id="baseImage"
-          alt="Tarjeta"
-          src="assets/tarjeta.jpg"
-          loading="eager"
-          decoding="async"
-        />
-
-        <canvas id="drawCanvas"></canvas>
+      <!-- Wrapper con scroll -->
+      <div class="stage-wrapper" aria-label="Área de dibujo">
+        <!-- Contenedor escalable -->
+        <div class="stage" id="stage">
+          <img
+            id="baseImage"
+            alt="Tarjeta"
+            src="assets/tarjeta.jpg"
+            loading="eager"
+            decoding="async"
+          />
+          <canvas id="drawCanvas"></canvas>
+        </div>
 
         <div class="stage-hint muted">
-          Mantén presionado y dibuja. En móvil, usa el dedo.
+          Usa el zoom para acercarte. Desliza para hacer scroll sin rayar.
         </div>
       </div>
     </section>
