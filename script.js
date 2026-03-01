@@ -222,26 +222,12 @@ setMode("draw");
     redrawAll();
     setUIState();
   }
-  function applyZoom() {
-  const zoom = Number(zoomRange.value);
-  stage.style.transform = `scale(${zoom})`;
-  zoomValue.textContent = zoom.toFixed(1);
-}
+  
 
-zoomRange.addEventListener("input", () => {
-  applyZoom();
-  // OJO: al hacer zoom, el tamaño visible cambia -> recalculamos canvas
-  fitCanvasToImage();
-});
+
 
 // al iniciar
-applyZoom(); 
 
-  function clearAll() {
-    strokes = [];
-    redrawAll();
-    setUIState();
-  }
   function downloadImage() {
   // Crear canvas temporal con tamaño REAL de la imagen
   const tempCanvas = document.createElement("canvas");

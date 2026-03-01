@@ -222,7 +222,7 @@ input[type="range"]{
 .stage{
   position: relative;
   display: inline-block;
-  transform-origin: top left;
+  
 }
 
 #baseImage{
