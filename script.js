@@ -18,7 +18,7 @@
   const stage = document.getElementById("stage");
   const img = document.getElementById("baseImage");
 
-  const colorPicker = document.getElementById("colorPicker");
+
 
   const downloadBtn = document.getElementById("downloadBtn");
   const undoBtn = document.getElementById("undoBtn");
@@ -31,7 +31,8 @@
   let activePointerId = null;
 
   let mode = "draw"; // "draw" | "pan"
-  const DEFAULT_LINE_WIDTH = 6;
+  const DEFAULT_LINE_WIDTH = 4;
+    const DEFAULT_COLOR = "#000000";
 
   // ====== Helpers ======  
   function clamp01(n) {
@@ -126,27 +127,28 @@
   });
 
   // ====== Dibujo ======
-  function startDraw(e) {
-    console.log("pointerdown", mode, e.pointerType);
-    if (mode === "pan") return;
-    if (activePointerId !== null) return;
+ function startDraw(e) {
+  console.log("pointerdown", mode, e.pointerType);
+  if (mode === "pan") return;
+  if (activePointerId !== null) return;
 
-    if (e.cancelable) e.preventDefault();
+  if (e.cancelable) e.preventDefault();
 
-    activePointerId = e.pointerId;
-    canvas.setPointerCapture(activePointerId);
+  activePointerId = e.pointerId;
+  canvas.setPointerCapture(activePointerId);
 
-    isDrawing = true;
-   currentStroke = {
-  color: colorPicker.value,
-  size: DEFAULT_LINE_WIDTH,
-  points: [getNormalizedPoint(e)]
-};
+  isDrawing = true; // ✅ FALTABA
 
-    redrawAll();
-    drawStroke(currentStroke, img.clientWidth, img.clientHeight);
-    setUIState();
-  }
+  currentStroke = {
+    color: DEFAULT_COLOR, // ✅ negro fijo
+    size: DEFAULT_LINE_WIDTH,
+    points: [getNormalizedPoint(e)]
+  };
+
+  redrawAll();
+  drawStroke(currentStroke, img.clientWidth, img.clientHeight);
+  setUIState();
+}
 
   function moveDraw(e) {
     if (!isDrawing || e.pointerId !== activePointerId || !currentStroke) return;
