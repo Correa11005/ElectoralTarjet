@@ -31,7 +31,7 @@
   let activePointerId = null;
 
   let mode = "draw"; // "draw" | "pan"
-  const DEFAULT_LINE_WIDTH = 4;
+  const DEFAULT_LINE_WIDTH = 2.5;
     const DEFAULT_COLOR = "#000000";
 
   // ====== Helpers ======  

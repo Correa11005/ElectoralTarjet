@@ -3,35 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="refresh" content="0; url=draw.html">
-  <title>Inicio | Canvas Draw</title>
+  <title>Dibujar | Canvas Draw</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="page">
-    <section class="card hero">
-      <h1>Dibujar sobre una imagen</h1>
-      <p class="muted">
-        Abre la herramienta, usa la imagen de ejemplo y dibuja con mouse o touch.
-      </p>
+    <header class="topbar">
+      <a class="btn btn-ghost" href="index.html">← Volver</a>
+      <h2 class="topbar-title">Dibuja sobre la imagen</h2>
+      <div class="spacer"></div>
+    </header>
 
-      <a class="btn btn-primary" href="draw.html">Abrir imagen para dibujar</a>
+    <section class="card">
+      <div class="controls">
+        <button id="modeBtn" class="btn btn-secondary" type="button" aria-pressed="true">
+          ✍️ Dibujar
+        </button>
 
-      <div class="tips">
-        <div class="tip">
-          <span class="badge">Tip</span>
-          <span>En móvil: usa “🖐 Navegar” para desplazarte sin rayar.</span>
-        </div>
-        <div class="tip">
-          <span class="badge">Tip</span>
-          <span>Usa “Deshacer” para múltiples pasos.</span>
+  
+        <button id="undoBtn" class="btn btn-secondary" type="button">Deshacer</button>
+        <button id="clearBtn" class="btn btn-danger" type="button">Borrar todo</button>
+        <button id="downloadBtn" class="btn btn-primary" type="button">Descargar imagen</button>
+      </div>
+
+      <!-- Wrapper con scroll -->
+      <div class="stage-wrapper" aria-label="Área de dibujo">
+        <!-- Contenedor imagen + canvas -->
+        <div class="stage" id="stage">
+          <img
+            id="baseImage"
+            alt="Tarjeta"
+            src="assets/tarjeta.jpg"
+            loading="eager"
+            decoding="async"
+          />
+
+          <canvas id="drawCanvas"></canvas>
+
+          <!-- ✅ Hint va DENTRO del stage -->
+          <div class="stage-hint muted">
+            Usa “🖐 Navegar” para desplazarte sin rayar. Cambia a “✍️ Dibujar” para marcar.
+          </div>
         </div>
       </div>
     </section>
 
     <footer class="footer muted">
-      Hecho con HTML5 Canvas + JavaScript Vanilla.
+      El dibujo se guarda en historial (strokes) para mantener proporción al redimensionar.
     </footer>
   </main>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
